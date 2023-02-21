@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   get 'about', to: 'pages#about'
     # Para la pagina "/about" (GET de HTML), asocia el Get con una
     # acción llamada 'about' de mi controlador de paginas // JE.- 
-  resources :articles, only: [:show, :index]
+  resources :articles, only: [:show, :index, :new, :create, :edit, :update]
 end
