@@ -1,7 +1,8 @@
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:show, :edit, :update, :destroy] 
+
   def show
-    # debugger
-    @article = Article.find(params[:id])
+    # no hace nada mas pues la la busqueda del articulo ya la hizo "set_article"
   end
 
   def index
@@ -13,15 +14,10 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @article = Article.find(params[:id])
+    # no hace nada mas pues la la busqueda del articulo ya la hizo "set_article"
   end
 
   def create
-    # render plain: params[:article] 
-    # @article = Article.new(params.require(:article).permit(:title, :description))
-    # @article.save 
-    # redirect_to article_path(:article) 
-
     @article = Article.new(article_params)
     if @article.save
       flash[:notice] = "Article was succesfully created"
@@ -32,7 +28,6 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @article = Article.find(params[:id])
     if @article.update(article_params)
       flash[:notice] = "Article was succesfully updated"
       redirect_to(:action => 'show', id: @article.id)
@@ -41,8 +36,17 @@ class ArticlesController < ApplicationController
     end 
   end
 
+  def destroy
+    @article.destroy
+    redirect_to articles_path
+  end
+
   private
 
+  def set_article
+    @article = Article.find(params[:id])
+  end
+ 
   def article_params
     params.require(:article).permit(:id, :title, :description)
   end
