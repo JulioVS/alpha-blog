@@ -19,6 +19,15 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
+
+    # L130: Luego de agregar Usuarios y la relacion 1 a n con Articulos
+    #       necesito colocar un user_id "dummy" provisoriamente hasta que
+    #       este implementado el sistema de autenticacion, pues de otro modo
+    #       va a dar error al momento de grabar en la BD.-
+    #       Por ahora a cada nuevo articulo le pongo el primer usuario que
+    #       que ya tenga cargado en la BD.-
+    @article.user = User.first 
+
     if @article.save
       flash[:notice] = "Article was succesfully created"
       redirect_to(:action => 'show', id: @article.id)
