@@ -3,6 +3,21 @@ class UsersController < ApplicationController
   def new
     @user = User.new 
   end
+
+  def edit
+    @user = User.find(params[:id]) 
+  end
+
+  def update
+    @user = User.find(params[:id]) 
+    if @user.update(user_params)
+      flash[:notice] = "Your account information was succesfully updated"
+      redirect_to articles_path
+    else
+      flash[:notice] = "No no no, try again motherfucker!"
+      render 'edit'
+    end
+  end
   
   def create
     # debugger
