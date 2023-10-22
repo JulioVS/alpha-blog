@@ -2,11 +2,20 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id]) 
-    @articles = @user.articles
+
+    # Modo clasico de obtener los items (sin paginar)
+    # @articles = @user.articles
+  
+    # Agrego paginado a los articulos del usuario
+    @articles = @user.articles.paginate(page: params[:page], per_page: 5)
   end
   
   def index
-    @users = User.all 
+    # Modo clasico de obtener los items (sin paginar)
+    # @users = User.all 
+ 
+    # Agrego paginado mediante uso del Gem "will_paginate"
+    @users = User.paginate(page: params[:page], per_page: 5) 
   end
   
   def new
