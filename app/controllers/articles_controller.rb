@@ -30,7 +30,10 @@ class ArticlesController < ApplicationController
     #       va a dar error al momento de grabar en la BD.-
     #       Por ahora a cada nuevo articulo le pongo el primer usuario que
     #       que ya tenga cargado en la BD.-
-    @article.user = User.first 
+    # @article.user = User.first
+    
+    # L158: Ahora si puedo poner el usuario real, que seria el que este logueado
+    @article.user = current_user
 
     if @article.save
       flash[:notice] = "Article was succesfully created"

@@ -1,10 +1,5 @@
 <!-- Add Booststrap V4.6 NavBar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  
-  <!-- Comento el dummy link HTML del Navbar... -->
-  <!-- a class="navbar-brand" id="logo" href="#">Alpha Blog</a -->
-  
-  <!-- ...y lo reemplazo por un link Embedded Ruby a la home page -->
   <%= link_to "Alpha Blog", root_path, class: "navbar-brand", id: "logo" %>
   
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,18 +8,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <!-- Comento el dummy link HTML del Navbar... -->
-        <!-- a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a -->
- 
-        <!-- ...y lo reemplazo por un link Embedded Ruby a Articles -->
-        <!-- %= link_to "Articles", articles_path, class: "nav-link" % -->
-      </li>
       <li class="nav-item">
-        <!-- Comento el dummy link HTML del Navbar... -->
-        <!-- a class="nav-link" href="#">Link</a -->
-
-        <!-- ...y lo reemplazo por un link Embedded Ruby a Users -->
         <%= link_to "Bloggers", users_path, class: "nav-link" %>
       </li>
       <li class="nav-item dropdown">
@@ -32,26 +16,33 @@
           Articles
         </a>
         <div class="dropdown-menu">
-          <!-- Comento el dummy link HTML del Dropdown... -->
-          <!-- a class="dropdown-item" href="#">Action</a -->
-          
-          <!-- ...y lo reemplazo por un link Embedded Ruby a New Article -->
-          <%= link_to "Create new article", new_article_path, class: "dropdown-item" %>
-
-          <!-- a class="dropdown-item" href="#">Another action</a -->
+          <% if logged_in? %>
+            <%= link_to "Create new article", new_article_path, class: "dropdown-item" %>
+          <% end %>
           <%= link_to "View articles", articles_path, class: "dropdown-item" %>
-          
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </li>
-      <li class="nav-item">
-        <!-- a class="nav-link disabled">Disabled</a -->
-        <%= link_to "Log in", login_path, class: "nav-link" %>
-      </li>
-      <li class="nav-item">
-        <%= link_to "Logout", logout_path, class: "nav-link", data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
-      </li>
+      <% if logged_in? %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Profile [<%= current_user.username %>] 
+          </a>
+          <div class="dropdown-menu">
+            <%= link_to "View your profile", user_path(current_user), class: "dropdown-item" %>
+            <%= link_to "Edit your profile", edit_user_path(current_user), class: "dropdown-item" %>
+          </div>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Logout", logout_path, class: "nav-link", data: {turbo_method: :delete} %>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to "Log in", login_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Sign up", signup_path, class: "nav-link" %>
+        </li>
+      <% end %>
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
