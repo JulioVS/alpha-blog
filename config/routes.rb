@@ -15,4 +15,12 @@ Rails.application.routes.draw do
   get 'signup', to: 'users#new'
   # Rutas para todo lo demas relacionado a usuarios, remite a Users Controller
   resources :users, except: [:new] 
+
+  # Para el Log In vamos a crear una ruta que no es RESTful, es decir que
+  # no trata con un recurso como ser Usuarios o Articulos ni va a base de datos
+  # sino que va a operar a nivel de "sesión", en memoria.-
+  # Para ello vamos a crear un "Sessions" (plural) Controller.-
+  get 'login', to: 'sessions#new'         # Display del login
+  post 'login', to: 'sessions#create'     # Submit del login
+  delete 'logout', to: 'sessions#destroy' # Baja de la sesión
 end
