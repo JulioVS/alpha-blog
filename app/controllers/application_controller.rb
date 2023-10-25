@@ -1,20 +1,20 @@
 class ApplicationController < ActionController::Base
   # Esto hace que los metodos sean accesibles para los Views ademas de los
-  # Controllers, como si estuviesen redactado en "AplicationHelper"
+  # Controllers, como si estuviesen redactados en "ApplicationHelper"
   #
   helper_method :current_user, :logged_in?
 
-  # Me traigo los metodos de ApllicationHelper (views) para aqui, de modo de
+  # Me traigo los metodos desde ApplicationHelper (views) hacia aqui, de modo de
   # poder usarlos en los controllers
   #
   def current_user
     # Como se lee esto...a ver...
     #
-    # 1. Defino una variable llamada "@current_user"
+    # 1. Defino una variable de instancia llamada "@current_user"
     #
     # 2. Si cuando ingreso al metodo esa variable no tiene mada,
     #    entonces busco el User mediante el ID de usuario almacenado
-    #    en la sesion, SIEMPRE Y CUANDO haya uno (es decir haya alguien
+    #    en la sesion, SIEMPRE Y CUANDO exista (es decir haya alguien
     #    logueado)
     #
     # 3. Si al entrar al metodo la variable "@current_user" ya existe
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     #    reitera la busqueda, pues implicaria un query redundante a la BD
     #
     # Para todo esto se usa el operador "Or Equal" de Ruby "||=" que lo que
-    # hace es asignar valor a una variable SOLAMENTE si no estuviese ya 
+    # hace es asignar valor a una variable SOLAMENTE si ya no está  
     # definida.-
     #
     @current_user ||= User.find(session[:user_id]) if session[:user_id] 
@@ -32,28 +32,28 @@ class ApplicationController < ActionController::Base
     # Y este, a ver...
     # 
     # Aqui lo que se quiere es devolver un valor lógico, que indique si hay
-    # un usuario logueado o no
+    # un usuario logueado o no.
     # Esto equivaldria a evaluar si mi variable @current_user tiene ya un 
-    # valor asignado o no: si tiene, devuelve "true" y si es nil devuelve
-    # false.-
+    # valor cargado o no: si lo tiene devuelve "true", si es nil devuelve
+    # "false".-
     #
     # Aqui para "boolean-izar" una variable simplemente se le antepone
     # un operador "!!" que al menos yo lo interpreto como una especie de
-    # doble negacion, algo asi como "si es falso que la variable sea nil"
-    # entonces hay alguien logueado... supongo!
+    # doble negacion, algo asi como "si es falso que la variable sea nula"
+    # entonces hay alguien logueado, ergo "true"... supongo!
     #
     
     # FIX JE: 
     #
-    # Si se llama a "logged_in?" sin que ANTES en algun lugar se haya invocado a
-    # "current_user", la funcion "logged_in?" NO FUNCIONA, aunque ya haya un 
-    # usuario cargado en la sesion!
+    # Si se llama a "logged_in?" sin que PREVIAMENTE se haya invocado "current_user"
+    # en algun lugar de la app, ésta NO FUNCIONARÁ, ni siquiera en el caso de que
+    # ya haya un usuario logueado y cargado en la sesion!
     #
-    # Esto es porque el User ID esta en "session" pero la variabla "current_user"
-    # no ha sido creada aun! (y por ello "logged_in?" siempre arroja falso)
+    # Esto es porque aunque el User ID ya esté en "session", la variable "@current_user"
+    # no habrá sido creada aun! (y por ello "logged_in?" siempre arrojará 'falso")
     #
-    # Por ende lo que hago para corregir el problema es invocar a "current_user" 
-    # mismo desde logged_in?, aqui al comienzo: 
+    # Por ende, lo que hago para corregir ese problema es simplemente invocar a  
+    # "current_user" al comienzo de la propia "logged_in?" y listo.-
     current_user
 
     !!@current_user
