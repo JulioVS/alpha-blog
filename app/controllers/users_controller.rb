@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update] 
+  before_action :set_user, only: [:show, :edit, :update, :destroy] 
+  before_action :require_user, only: [:edit, :update, :destroy] 
+  before_action :require_same_user, only: [:edit, :update, :destroy]  
 
   def show
     # Modo clasico de obtener los items (sin paginar)
@@ -50,6 +52,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    # Barrerá con el usuario y todos sus articulos automáticamente, debido
+    # a la dependencia que declaré al principio del User model.-
+    @user.destroy
+
+    # IMPORTANTE!
+    # Hay que sacar el user ID del objeto session a mano!
+    # Caso contrario queda "logueado" no permitiendo hacer nuevos log ins
+    session[:user_id] = nil
+    
+    flash[:notice] = "Goodbye to you and your effin' articles mate!!!"
+    redirect_to articles_path 
+
+    #flash[:alert] = "ALERT! DESTROY INMINENT!!"
+    #redirect_to @user
+  end 
+
   private
 
   def set_user
@@ -59,4 +78,12 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:username, :email, :password)
   end
+
+  def require_same_user
+    if current_user != @user
+      flash[:alert] = "You can only edit your own account"
+      redirect_to @user 
+    end
+  end
+
 end
