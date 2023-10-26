@@ -59,14 +59,20 @@ class UsersController < ApplicationController
 
     # IMPORTANTE!
     # Hay que sacar el user ID del objeto session a mano!
-    # Caso contrario queda "logueado" no permitiendo hacer nuevos log ins
-    session[:user_id] = nil
+    # Caso contrario queda "logueado" no permitiendo hacer nuevos logins
+    #
+    # UPDATE L172:
+    # Ahora que un administrador también puede borrar usuarios, es importante
+    # que solo deslogueemos la sesión cuando un usuario se borre a si mismo
+    # (caso normal) pero NO cuando sea el Admin que lo esté borrando.
+    # Si es el Admin borrando un usuario, puede y debe permanecer logueado
+    # para poder seguir haciendo tareas de admimnistracion.
+    # Por ende, simplemente se desloguea la sesión si el usuario que se está
+    # borrando coincide con el usuario actualmente logueado.-
+    session[:user_id] = nil if @user == current_user
     
     flash[:notice] = "Goodbye to you and your effin' articles mate!!!"
     redirect_to articles_path 
-
-    #flash[:alert] = "ALERT! DESTROY INMINENT!!"
-    #redirect_to @user
   end 
 
   private
@@ -80,8 +86,9 @@ class UsersController < ApplicationController
   end
 
   def require_same_user
-    if current_user != @user
-      flash[:alert] = "You can only edit your own account"
+    # Si no es el propio usuario ni un Administrador, lo rebota.-
+    if current_user != @user && !current_user.admin?
+      flash[:alert] = "You can only edit or delete your own account"
       redirect_to @user 
     end
   end

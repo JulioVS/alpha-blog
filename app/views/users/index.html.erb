@@ -25,11 +25,21 @@
             <!-- Boton View visible siempre -->
             <%= link_to "View Profile", user, class: "btn btn-outline-success" %>
  
-            <!-- Boton Edit solo visible si es el usuario logueado -->
-            <% if logged_in? && user == current_user %> 
-              <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-outline-info" %>
+            <% if logged_in? %>
+
+              <!-- Boton Edit solo visible si es del usuario logueado -->
+              <% if user == current_user %> 
+                <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-outline-info" %>
+              <% end %>
+
+              <!-- Boton Delete solo visible si es un usuario administrador -->
+              <% if current_user.admin? %> 
+                <%= link_to "Delete profile", user_path(user), class: "btn btn-outline-danger", data: {turbo_method: :delete, 
+                    turbo_confirm: "Are you sure you want to delete the user account and all associated articles?"} %>
+              <% end %>
+
             <% end %>
-         </div>
+          </div>
           <div class="card-footer text-muted">
             <small>
               Joined <%= time_ago_in_words(user.created_at) %> ago
