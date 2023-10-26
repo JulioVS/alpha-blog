@@ -32,7 +32,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Your account information was succesfully updated"
       redirect_to @user 
     else
-      flash[:notice] = "No no no, try again motherfucker!"
+      flash[:alert] = "No no no, try again motherfucker!"
       render 'edit'
     end
   end
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Welcome to the Alpha Blog #{@user.username}, you have sucessfully signed up"
       redirect_to articles_path
     else
-      flash[:notice] = "Not Welcome, you suck!"
+      flash[:alert] = "Not Welcome, you suck!"
       render 'new'
     end
   end
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
     # borrando coincide con el usuario actualmente logueado.-
     session[:user_id] = nil if @user == current_user
     
-    flash[:notice] = "Goodbye to you and your effin' articles mate!!!"
+    flash[:notice] = "Account and all associated articles successfully deleted"
     redirect_to articles_path 
   end 
 
