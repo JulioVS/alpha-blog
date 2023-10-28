@@ -23,4 +23,6 @@ Rails.application.routes.draw do
   get 'login', to: 'sessions#new'         # Display del login
   post 'login', to: 'sessions#create'     # Submit del login
   delete 'logout', to: 'sessions#destroy' # Baja de la sesión
+
+  resources :categories, except: [:destroy] 
 end
