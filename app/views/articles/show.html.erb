@@ -9,6 +9,12 @@
             by <%= link_to @article.user.username, user_path(@article.user) %>
           <% end %>
           <%= link_to gravatar_for(@article.user), user_path(@article.user) %>
+          <% if @article.categories.any? %>
+            <div class="mt-2">
+              <!-- JE: Agregué ".order(:name)" a las categorias para que las pills se desplieguen alfabeticamente -->
+              <%= render @article.categories.order(:name) %>
+            </div>
+          <% end %>
         </div>
         <div class="card-body">
           <div class="card-text text-left">
