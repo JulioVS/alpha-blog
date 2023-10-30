@@ -24,6 +24,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
+    # debugger
     @article = Article.new(article_params)
 
     # L130: Luego de agregar Usuarios y la relacion 1 a n con Articulos
@@ -66,7 +67,7 @@ class ArticlesController < ApplicationController
   end
  
   def article_params
-    params.require(:article).permit(:id, :title, :description)
+    params.require(:article).permit(:id, :title, :description, category_ids: []) 
   end
 
   def require_same_user
